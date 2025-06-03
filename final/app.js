@@ -1,9 +1,8 @@
 import { CONFIG } from "./config.js";
-import { getPixelRatio, setupCanvas } from "./canvas-utils.js";
-import { BinaryAnimation } from "./binary-animation.js";
+import { getPixelRatio, setupCanvas } from "../shared/js/canvas-utils.js";
+import { BinaryAnimation } from "../shared/js/binary-animation.js";
 import { LingoAnimation } from "./lingo-animation.js";
 import { Logo3DAnimation } from "./logo-3d-animation.js";
-import { ConfigPanel } from "./config-panel.js";
 import { WordsReceiver } from "./words-receiver.js";
 
 class App {
@@ -16,7 +15,6 @@ class App {
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
     this.lingoAnimation = new LingoAnimation(CONFIG);
     this.logo3DAnimation = new Logo3DAnimation();
-    this.configPanel = new ConfigPanel(this);
 
     this.init();
   }

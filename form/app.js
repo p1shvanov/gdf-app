@@ -1,6 +1,6 @@
 import { CONFIG } from "./config.js";
-import { getPixelRatio, setupCanvas } from "./canvas-utils.js";
-import { BinaryAnimation } from "./binary-animation.js";
+import { getPixelRatio, setupCanvas } from "../shared/js/canvas-utils.js";
+import { BinaryAnimation } from "../shared/js/binary-animation.js";
 import { TerminalAnimation } from "./terminal-animation.js";
 import { LogoAnimation } from "./logo-animation.js";
 
@@ -10,9 +10,10 @@ class App {
     this.canvas = setupCanvas();
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
     this.terminalAnimation = new TerminalAnimation(
-      "terminal",
-      CONFIG.DEMO_WORDS,
-      CONFIG.BRANDBOOK_COLORS
+      [],
+      CONFIG.COLORS.PURPLE,
+      CONFIG.COLORS.PINK,
+      CONFIG.COLORS.TEAL
     );
     this.logoAnimation = new LogoAnimation();
 

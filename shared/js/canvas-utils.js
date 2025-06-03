@@ -27,4 +27,4 @@ export function setupCanvas(canvasId = "binary-canvas") {
   const height = window.innerHeight;
   const ratio = getPixelRatio(canvasId);
   return createHiDPICanvas(width, height, ratio, canvasId);
-}
+} 

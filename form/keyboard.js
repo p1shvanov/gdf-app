@@ -95,7 +95,7 @@ export default class Keyboard {
 
                 case "lang":
                     keyElement.classList.add("keyboard__key--wide");
-                    keyElement.textContent = "RU";
+                    keyElement.innerHTML = createIconHTML("language");
                     break;
 
                 case "done":
@@ -140,7 +140,6 @@ export default class Keyboard {
             : Keyboard.LANGUAGES.EN;
         
         const langButton = this.keyboard.querySelector('[data-key="lang"]');
-        langButton.textContent = this.currentLanguage === Keyboard.LANGUAGES.EN ? 'RU' : 'EN';
         
         this.updateKeyboardLayout();
     }

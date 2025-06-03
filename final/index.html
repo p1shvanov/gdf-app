@@ -3,275 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Global Digital Forum - Shaping tomorrow's code" />
+    <meta name="description" content="Global Digital Forum" />
     <meta name="theme-color" content="#0f1e28" />
-    
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:title" content="Global Digital Forum" />
-    <meta property="og:description" content="Shaping tomorrow's code at the Global Digital Forum" />
+    <meta property="og:description" content="Shaping the Code of the Future at the Global Digital Forum" />
     <meta property="og:type" content="website" />
     
     <title>Global Digital Forum</title>
-    
     <!-- Preload critical assets -->
-    <link rel="preload" href="styles.css" as="style" />
     <link rel="preload" href="app.js" as="script" crossorigin="anonymous" />
-    <link rel="preload" href="svg.svg" as="image" />
-    
+    <link rel="preload" href="logo-visible.svg" as="image" />
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
   </head>
   <body>
-    <!-- Background Effects -->
     <canvas id="binary-canvas" aria-hidden="true"></canvas>
     <div id="canvas-overlay" aria-hidden="true"></div>
-
     <main class="content">
       <header class="header">
         <h1 class="header-title">Code Of The Future</h1>
       </header>
-
       <div class="logo-container">
         <div class="logo-wrapper">
           <div class="logo-3d" aria-hidden="true">
-            <svg class="logo-hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 748.06 161.22" aria-hidden="true">
-              <defs></defs>
-              <path d="M70.56,98.27c-1.47-.4-2.9-.88-4.3-1.43-15.45-6.09-26.34-21.13-26.34-38.67,0-22.95,18.62-41.55,41.58-41.55h.03V0h-.03C49.35,0,23.29,26.04,23.29,58.17c0,24.6,15.28,45.63,36.87,54.14.06.03.13.05.2.08l10.2-14.11Z"/>
-              <path d="M42.24,136.61l-9.84,13.41c9.49,6.71,21.07,10.65,33.58,10.65,32.15,0,58.22-26.04,58.22-58.17,0-11.26-3.2-21.77-8.75-30.67l-16.42,5.46c5.35,6.99,8.53,15.73,8.53,25.21,0,22.95-18.61,41.55-41.58,41.55-8.83,0-17.01-2.75-23.74-7.43Z"/>
-              <path d="M18.57,62.22l-15.78-5.28c-1.81,5.62-2.79,11.62-2.79,17.85,0,32.13,26.07,58.17,58.22,58.17,17.9,0,33.92-8.08,44.6-20.78l-10.23-14c-7.48,10.96-20.09,18.16-34.37,18.16-22.97,0-41.58-18.6-41.58-41.55,0-4.38.67-8.6,1.93-12.57Z"/>
-              <path d="M121.35,136.2l9.99,13.3c14.49-10.58,23.9-27.69,23.9-47,0-32.13-26.06-58.17-58.21-58.17-5.38,0-10.58.73-15.53,2.09v17.52c4.8-1.93,10.04-2.99,15.53-2.99,22.96,0,41.58,18.6,41.58,41.55,0,13.87-6.8,26.16-17.26,33.7Z"/>
-              <path d="M63.28,77.26c-.05-.82-.07-1.64-.07-2.47,0-22.95,18.62-41.55,41.58-41.55,18.61,0,34.37,12.22,39.67,29.07l15.78-5.28c-7.51-23.44-29.5-40.41-55.45-40.41-31.1,0-56.51,24.38-58.13,55.05l16.62,5.58Z"/>
-            </svg>
           </div>
           <div class="text-logo">
-            <img src="./svg.svg" alt="GDF Logo Text" width="400" height="100" />
+            <img src="./logo-visible.svg" alt="GDF Logo Text" width="400" height="100" />
           </div>
         </div>
       </div>
-
       <footer class="footer">
-        <p class="footer-subtitle">Shaping tomorrow's code at the Global Digital Forum</p>
+        <p class="footer-subtitle">Shaping the Code of the Future at the Global Digital Forum</p>
       </footer>
     </main>
-
-    <!-- Config Panel -->
-    <button id="config-toggle" class="config-toggle" aria-label="Toggle configuration panel">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <path fill="currentColor" d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
-      </svg>
-    </button>
-
-    <div id="config-panel" class="config-panel" aria-hidden="true">
-      <div class="config-panel-content">
-        <h2>Configuration</h2>
-        
-        <div class="config-section">
-          <h3>Core Settings</h3>
-          <div class="config-group">
-            <label for="fps">FPS</label>
-            <input type="number" id="fps" min="1" max="60" step="1">
-          </div>
-          <div class="config-group">
-            <label for="font-size">Font Size</label>
-            <input type="number" id="font-size" min="8" max="32" step="1">
-          </div>
-          <div class="config-group">
-            <label for="empty-probability">Empty Space Probability</label>
-            <input type="range" id="empty-probability" min="0" max="1" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="pixel-ratio">Pixel Ratio</label>
-            <input type="number" id="pixel-ratio" min="0.5" max="3" step="0.1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>Binary Animation</h3>
-          <div class="config-group">
-            <label for="binary-char-1">Binary Character 1</label>
-            <input type="text" id="binary-char-1" maxlength="1">
-          </div>
-          <div class="config-group">
-            <label for="binary-char-2">Binary Character 2</label>
-            <input type="text" id="binary-char-2" maxlength="1">
-          </div>
-          <div class="config-group">
-            <label for="binary-char-3">Binary Character 3</label>
-            <input type="text" id="binary-char-3" maxlength="1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>Effects</h3>
-          <div class="config-group">
-            <label for="twinkle-enabled">Twinkle Effect</label>
-            <input type="checkbox" id="twinkle-enabled">
-          </div>
-          <div class="config-group">
-            <label for="twinkle-probability">Twinkle Probability</label>
-            <input type="range" id="twinkle-probability" min="0" max="1" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="twinkle-duration">Twinkle Duration (ms)</label>
-            <input type="number" id="twinkle-duration" min="50" max="500" step="10">
-          </div>
-          <div class="config-group">
-            <label for="twinkle-color">Twinkle Color</label>
-            <input type="color" id="twinkle-color">
-          </div>
-          <div class="config-group">
-            <label for="waves-enabled">Waves Effect</label>
-            <input type="checkbox" id="waves-enabled">
-          </div>
-          <div class="config-group">
-            <label for="waves-speed">Waves Speed</label>
-            <input type="range" id="waves-speed" min="0.1" max="2" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="waves-interval">Waves Interval</label>
-            <input type="number" id="waves-interval" min="10" max="100" step="5">
-          </div>
-          <div class="config-group">
-            <label for="waves-width">Waves Width</label>
-            <input type="number" id="waves-width" min="1" max="20" step="1">
-          </div>
-          <div class="config-group">
-            <label for="waves-activation-prob">Waves Activation Probability</label>
-            <input type="range" id="waves-activation-prob" min="0" max="1" step="0.1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>3D Logo Camera</h3>
-          <div class="config-group">
-            <label for="camera-fov">Field of View</label>
-            <input type="number" id="camera-fov" min="30" max="120" step="1">
-          </div>
-          <div class="config-group">
-            <label for="camera-near">Near Plane</label>
-            <input type="number" id="camera-near" min="0.001" max="1" step="0.001">
-          </div>
-          <div class="config-group">
-            <label for="camera-far">Far Plane</label>
-            <input type="number" id="camera-far" min="100" max="2000" step="100">
-          </div>
-          <div class="config-group">
-            <label for="camera-position-z">Camera Distance</label>
-            <input type="number" id="camera-position-z" min="50" max="200" step="1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>3D Logo Model</h3>
-          <div class="config-group">
-            <label for="rotation-speed">Rotation Speed</label>
-            <input type="range" id="rotation-speed" min="0" max="0.02" step="0.001">
-          </div>
-          <div class="config-group">
-            <label for="extrude-depth">Extrude Depth</label>
-            <input type="number" id="extrude-depth" min="10" max="50" step="1">
-          </div>
-          <div class="config-group">
-            <label for="bevel-thickness">Bevel Thickness</label>
-            <input type="number" id="bevel-thickness" min="0" max="5" step="0.5">
-          </div>
-          <div class="config-group">
-            <label for="bevel-size">Bevel Size</label>
-            <input type="number" id="bevel-size" min="0" max="5" step="0.5">
-          </div>
-          <div class="config-group">
-            <label for="bevel-segments">Bevel Segments</label>
-            <input type="number" id="bevel-segments" min="1" max="10" step="1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>3D Logo Shader</h3>
-          <div class="config-group">
-            <label for="fresnel-intensity">Fresnel Intensity</label>
-            <input type="range" id="fresnel-intensity" min="0" max="2" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="contrast">Contrast</label>
-            <input type="range" id="contrast" min="0.5" max="1.5" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="teal-influence">Teal Influence</label>
-            <input type="range" id="teal-influence" min="0" max="2" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="saturation">Saturation</label>
-            <input type="range" id="saturation" min="0.7" max="1.3" step="0.1">
-          </div>
-          <div class="config-group">
-            <label for="brightness">Brightness</label>
-            <input type="range" id="brightness" min="0.7" max="1.3" step="0.1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>Text Animation</h3>
-          <div class="config-group">
-            <label for="text-animation-duration">Animation Duration (s)</label>
-            <input type="number" id="text-animation-duration" min="1" max="10" step="0.5">
-          </div>
-          <div class="config-group">
-            <label for="text-animation-timing">Animation Timing</label>
-            <select id="text-animation-timing">
-              <option value="ease-in">Ease In</option>
-              <option value="ease-out">Ease Out</option>
-              <option value="ease-in-out">Ease In Out</option>
-              <option value="linear">Linear</option>
-            </select>
-          </div>
-          <div class="config-group">
-            <label for="text-opacity">Text Opacity</label>
-            <input type="range" id="text-opacity" min="0" max="1" step="0.1">
-          </div>
-        </div>
-
-        <div class="config-section">
-          <h3>Colors</h3>
-          <div class="config-group">
-            <label for="color-primary">Primary Color</label>
-            <input type="color" id="color-primary">
-          </div>
-          <div class="config-group">
-            <label for="color-secondary">Secondary Color</label>
-            <input type="color" id="color-secondary">
-          </div>
-          <div class="config-group">
-            <label for="color-tertiary">Tertiary Color</label>
-            <input type="color" id="color-tertiary">
-          </div>
-          <div class="config-group">
-            <label for="background-color">Background Color</label>
-            <input type="color" id="background-color">
-          </div>
-          <div class="config-group">
-            <label for="brandbook-color-1">Brandbook Color 1</label>
-            <input type="color" id="brandbook-color-1">
-          </div>
-          <div class="config-group">
-            <label for="brandbook-color-2">Brandbook Color 2</label>
-            <input type="color" id="brandbook-color-2">
-          </div>
-          <div class="config-group">
-            <label for="brandbook-color-3">Brandbook Color 3</label>
-            <input type="color" id="brandbook-color-3">
-          </div>
-        </div>
-
-        <div class="config-actions">
-          <button id="config-reset" class="button">Reset to Default</button>
-          <button id="config-apply" class="button button-primary">Apply Changes</button>
-        </div>
-      </div>
-    </div>
-
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/SVGLoader.js" crossorigin="anonymous"></script>

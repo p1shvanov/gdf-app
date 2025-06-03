@@ -1,0 +1,53 @@
+/* Background Effects */
+#binary-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-binary);
+}
+
+#canvas-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-overlay);
+  pointer-events: none;
+  z-index: var(--z-overlay);
+}
+
+/* Layout */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: var(--space-sm);
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding-top: var(--space-lg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-content);
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding-bottom: var(--space-lg);
+  z-index: var(--z-content);
+} 

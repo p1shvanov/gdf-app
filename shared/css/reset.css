@@ -1,0 +1,19 @@
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-background-dark);
+  font-family: var(--font-family-primary);
+  display: flex;
+  color: var(--color-white);
+} 

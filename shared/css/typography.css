@@ -1,0 +1,20 @@
+/* Typography */
+.header-title {
+  font-size: var(--font-size-h1);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-extrabold);
+}
+
+.footer-subtitle {
+  font-size: var(--font-size-h2);
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  font-weight: var(--font-weight-bold);
+}
+
+.lingo {
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-regular);
+} 

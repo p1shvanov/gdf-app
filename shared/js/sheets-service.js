@@ -1,5 +1,4 @@
 export class SheetsService {
-    // https://docs.google.com/spreadsheets/d/1pAMVawuJ3yqZ2hbJaUMX5NKIL7ggGbTaCOD-3ILTekU/edit?gid=0#gid=0
   constructor() {
     // Replace this with your Google Apps Script Web App URL
     this.SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_8XlKlkUKKgPB_El1SU9cPly-A3FP2iVIn2B-0puKHmZm4Gdgit61ZRK7vNdIaCzikg/exec';
@@ -15,7 +14,7 @@ export class SheetsService {
     return word.replace(/<[^>]*>/g, '').trim();
   }
 
-  async submitWord(word) {
+  async submitWord(word, verified = false) {
     const cleanWord = this.cleanInput(word);
     
     if (!cleanWord) {
@@ -23,7 +22,10 @@ export class SheetsService {
     }
 
     // Add to queue
-    this.queue.push(cleanWord);
+    this.queue.push({
+      word: cleanWord,
+      verified: verified
+    });
     
     // Start processing if not already processing
     if (!this.isProcessing) {
@@ -44,23 +46,28 @@ export class SheetsService {
 
     while (this.queue.length > 0 && retries < this.maxRetries) {
       try {
-        const word = this.queue[0];
+        const { word, verified } = this.queue[0];
         
         const response = await fetch(this.SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             value: word,
-            verified: false
+            verified: verified
           })
         });
 
-        // Remove the word from queue if successful
-        this.queue.shift();
-        retries = 0; // Reset retries on success
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          // Remove the word from queue if successful
+          this.queue.shift();
+          retries = 0; // Reset retries on success
+        } else {
+          throw new Error(data.message);
+        }
 
         // Add small delay between requests
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -91,24 +98,18 @@ export class SheetsService {
     } = options;
 
     try {
-      const response = await fetch(`${this.SCRIPT_URL}?limit=${limit}&random=${random}&lastTimestamp=${lastTimestamp}`, {
-        method: 'GET',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'text/plain',
-        }
-      });
+      const response = await fetch(`${this.SCRIPT_URL}?limit=${limit}&random=${random}&lastTimestamp=${lastTimestamp}`);
+      const data = await response.json();
 
-      // Since we're using no-cors, we can't read the response
-      // We'll update the timestamp and return a mock response
-      this.lastTimestamp = new Date().toISOString();
-      
-      return {
-        status: 'success',
-        words: [],
-        total: 0,
-        timestamp: this.lastTimestamp
-      };
+      if (data.status === 'success') {
+        this.lastTimestamp = new Date().toISOString();
+        return {
+          ...data,
+          timestamp: this.lastTimestamp
+        };
+      } else {
+        throw new Error(data.message);
+      }
     } catch (error) {
       console.error('Error fetching words:', error);
       throw error;

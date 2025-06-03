@@ -1,4 +1,4 @@
-import { SheetsService } from './sheets-service.js';
+import { SheetsService } from '../shared/js/sheets-service.js';
 
 export class WordsReceiver {
   constructor() {
