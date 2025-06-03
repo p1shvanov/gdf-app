@@ -1,4 +1,4 @@
-import { CONFIG } from './config.js';
+import { CONFIG } from "../config/index.js";
 
 export class Logo3DAnimation {
   constructor() {
@@ -203,9 +203,9 @@ export class Logo3DAnimation {
   }
 
   createShaderMaterial() {
-    const color1 = new THREE.Color(CONFIG.COLORS.PINK);
-    const color2 = new THREE.Color(CONFIG.COLORS.PURPLE);
-    const color3 = new THREE.Color(CONFIG.COLORS.TEAL);
+    const color1 = new THREE.Color(CONFIG.COLORS.TEAL);
+    const color2 = new THREE.Color(CONFIG.COLORS.PINK);
+    const color3 = new THREE.Color(CONFIG.COLORS.PURPLE);
 
     // Create shader material with gradient
     const material = new THREE.ShaderMaterial({

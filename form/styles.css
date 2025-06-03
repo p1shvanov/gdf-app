@@ -11,9 +11,7 @@
   grid-template-areas:
     "header"
     "console";
-  max-width: 1920px;
   margin: 0 auto;
-  aspect-ratio: 16/9;
 }
 
 .header {

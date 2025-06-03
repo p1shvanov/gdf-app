@@ -1,12 +1,11 @@
-import { CONFIG } from "./config.js";
-import { getPixelRatio, setupCanvas } from "../shared/js/canvas-utils.js";
+import { CONFIG } from "../shared/config/index.js";
+import { setupCanvas } from "../shared/js/canvas-utils.js";
 import { BinaryAnimation } from "../shared/js/binary-animation.js";
-import { TerminalAnimation } from "./terminal-animation.js";
-import { LogoAnimation } from "./logo-animation.js";
+import { TerminalAnimation } from "../shared/js/terminal-animation.js";
+import { LogoAnimation } from "../shared/js/logo-animation.js";
 
 class App {
   constructor() {
-    window.PIXEL_RATIO = getPixelRatio();
     this.canvas = setupCanvas();
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
     this.terminalAnimation = new TerminalAnimation(

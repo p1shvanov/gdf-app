@@ -1,13 +1,12 @@
-import { CONFIG } from "./config.js";
-import { getPixelRatio, setupCanvas } from "../shared/js/canvas-utils.js";
+import { CONFIG } from "../shared/config/index.js";
+import { setupCanvas } from "../shared/js/canvas-utils.js";
 import { BinaryAnimation } from "../shared/js/binary-animation.js";
-import { LingoAnimation } from "./lingo-animation.js";
-import { Logo3DAnimation } from "./logo-3d-animation.js";
-import { WordsReceiver } from "./words-receiver.js";
+import { LingoAnimation } from "../shared/js/lingo-animation.js";
+import { Logo3DAnimation } from "../shared/js/logo-3d-animation.js";
+import { WordsReceiver } from "../shared/js/words-receiver.js";
 
 class App {
   constructor() {
-    window.PIXEL_RATIO = getPixelRatio();
     this.canvas = setupCanvas();
     this.wordsReceiver = new WordsReceiver();
     

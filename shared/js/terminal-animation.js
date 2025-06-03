@@ -1,5 +1,5 @@
-import Keyboard from './keyboard.js';
-import { SheetsService } from '../shared/js/sheets-service.js';
+import Keyboard from '../../form/keyboard.js';
+import { SheetsService } from './sheets-service.js';
 
 export class TerminalAnimation {
   constructor(targetId, words, colors) {

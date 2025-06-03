@@ -3,79 +3,8 @@
 @import url('../shared/css/typography.css');
 @import url('../shared/css/common.css');
 
-/* Colors */
---color-white: #ffffff;
---color-background-dark: #0f1e28;
---color-overlay: rgba(0, 0, 0, 0.3);
 
-/* Spacing */
---space-unit: 1em;
---space-xs: calc(0.5 * var(--space-unit));
---space-sm: calc(1 * var(--space-unit));
---space-md: calc(2 * var(--space-unit));
---space-lg: calc(8 * var(--space-unit));
 
-/* Typography */
---font-family-primary: 'Montserrat', sans-serif;
---font-weight-regular: 400;
---font-weight-bold: 700;
---font-weight-extrabold: 800;
---font-size-base: 16px;
---font-size-h1: clamp(3rem, 5vw, 5rem);
---font-size-h2: clamp(2rem, 2.5vw, 3rem);
-
-/* Z-index layers */
---z-binary: 1;
---z-overlay: 2;
---z-lingo: 3;
---z-content: 4;
-
-/* Animation */
---animation-duration: 5s;
---animation-timing: ease-in;
-
-/* Reset & Base Styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: var(--font-size-base);
-}
-
-body {
-  height: 100vh;
-  overflow: hidden;
-  background: var(--color-background-dark);
-  font-family: var(--font-family-primary);
-  display: flex;
-  color: var(--color-white);
-}
-
-/* Background Effects */
-#binary-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: var(--z-binary);
-}
-
-#canvas-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-overlay);
-  pointer-events: none;
-  z-index: var(--z-overlay);
-}
-
-/* Layout */
 .content {
   flex: 1;
   display: flex;
@@ -149,9 +78,7 @@ body {
   flex-shrink: 0;
 }
 
-.logo-hidden {
-  display: none;
-}
+
 
 .text-logo {
   flex: 1;
@@ -188,33 +115,3 @@ body {
     transform: perspective(500px) translate3d(var(--dest-x), var(--dest-y), var(--dest-z));
   }
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .logo-wrapper {
-    flex-direction: column;
-  }
-  
-  .logo-3d {
-    width: min(300px, 60vw);
-    height: min(300px, 60vw);
-  }
-  
-  .text-logo {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --space-lg: calc(4 * var(--space-unit));
-  }
-  
-  .logo-3d {
-    width: min(250px, 70vw);
-    height: min(250px, 70vw);
-  }
-}
-

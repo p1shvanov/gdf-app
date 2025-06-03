@@ -41,7 +41,7 @@
   
   /* Z-index layers */
   --z-binary: 1;
-  --z-overlay: 2;
+  --z-overlay: 3;
   --z-lingo: 3;
   --z-content: 4;
   --z-keyboard: 1000;
