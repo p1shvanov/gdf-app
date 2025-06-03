@@ -16,14 +16,6 @@ export const commonConfig = {
     COLOR: "#333333"
   },
 
-  WAVES: {
-    ENABLED: false,
-    SPEED: 0.5,
-    INTERVAL: 50,
-    WIDTH: 10,
-    ACTIVATION_PROB: 0.7
-  },
-
   // Colors
   COLORS: {
     PURPLE: "#5e2ced",

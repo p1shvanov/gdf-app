@@ -9,11 +9,6 @@ export class BinaryAnimation {
     this.interval = 2000 / this.config.FPS;
     this.frameCount = 0;
 
-    // Initialize effects
-    if (this.config.WAVES.ENABLED) {
-      this.wavePosition = 0;
-    }
-
     this.init();
   }
 
@@ -84,7 +79,6 @@ export class BinaryAnimation {
 
       // Special effects
       if (this.config.TWINKLE.ENABLED) this.applyTwinkleEffect();
-      if (this.config.WAVES.ENABLED) this.applyWaveEffect();
 
       this.then = now - (delta % this.interval);
     }
@@ -120,26 +114,6 @@ export class BinaryAnimation {
           this.ctx.fillStyle = this.gradient;
           this.drawBit(randomBit);
         }, this.config.TWINKLE.DURATION);
-      }
-    }
-  }
-
-  applyWaveEffect() {
-    this.wavePosition += this.config.WAVES.SPEED;
-    if (this.wavePosition > this.config.WAVES.INTERVAL) {
-      this.wavePosition = 0;
-    }
-
-    for (let bit of this.bits) {
-      if (bit.hasDrawn && !bit.isEmpty) {
-        const inWave =
-          Math.abs((bit.y - this.wavePosition) % this.config.WAVES.INTERVAL) <
-          this.config.WAVES.WIDTH;
-        if (inWave && Math.random() > 1 - this.config.WAVES.ACTIVATION_PROB) {
-          this.clearBit(bit);
-          bit.value = this.getNewBitValue(bit.value);
-          this.drawBit(bit);
-        }
       }
     }
   }
