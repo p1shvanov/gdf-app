@@ -91,4 +91,34 @@
 
 .keyboard__key--dark:active {
   background: rgba(94, 44, 237, 0.4);
+}
+
+/* Disabled keys when character limit is reached */
+.keyboard__key--disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.keyboard__key--disabled:hover,
+.keyboard__key--disabled:active {
+  background: rgba(255, 255, 255, 0.05) !important;
+  transform: none !important;
+}
+
+/* Processing state for done button */
+.keyboard__key--processing {
+  background: rgba(94, 44, 237, 0.1) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  cursor: wait !important;
+  pointer-events: none;
+  animation: processing-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes processing-pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.6; }
 } 

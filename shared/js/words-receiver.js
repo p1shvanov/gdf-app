@@ -1,9 +1,10 @@
 import { SheetsService } from './sheets-service.js';
+import { CONFIG } from '../config/index.js';
 
 export class WordsReceiver {
   constructor() {
     this.sheetsService = new SheetsService();
-    this.pollingInterval = 30000; // 30 seconds
+    this.pollingInterval = CONFIG.API.POLLING_INTERVAL; // 30 seconds
     this.isPolling = false;
     this.words = [];
     this.callbacks = new Set();

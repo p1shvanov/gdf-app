@@ -1,3 +1,5 @@
+import { CONFIG } from '../shared/config/index.js';
+
 export default class Keyboard {
     static LANGUAGES = {
         EN: 'en',
@@ -34,12 +36,26 @@ export default class Keyboard {
         this.instance.onSubmit = onSubmit;
     }
 
+    static setProcessing(isProcessing) {
+        if (this.instance) {
+            this.instance.setProcessing(isProcessing);
+        }
+    }
+
+    static setKeyboardEnabled(enabled) {
+        if (this.instance) {
+            this.instance.setKeyboardEnabled(enabled);
+        }
+    }
+
     constructor() {
         this.onInput = null;
         this.onSubmit = null;
         this.value = "";
         this.isCapsLock = false;
         this.currentLanguage = Keyboard.LANGUAGES.EN;
+        this.isProcessing = false;
+        this.isKeyboardEnabled = true;
         this.createKeyboard();
     }
 
@@ -118,6 +134,9 @@ export default class Keyboard {
         main.appendChild(keysContainer);
         document.body.appendChild(main);
         this.keyboard = main;
+        
+        // Set initial keyboard state (disable done button for empty input)
+        this.updateKeyboardState();
     }
 
     getKeyText(key) {
@@ -145,10 +164,17 @@ export default class Keyboard {
     }
 
     handleKeyClick(key) {
+        // Prevent all input when keyboard is fully disabled
+        if (!this.isKeyboardEnabled) {
+            return;
+        }
+        
         if (key === 'backspace') {
             this.value = this.value.slice(0, -1);
         } else if (key === 'space') {
-            this.value += ' ';
+            if (this.value.length < CONFIG.TERMINAL.VALIDATION.MAX_LENGTH) {
+                this.value += ' ';
+            }
         } else if (key === 'enter') {
             this.value += '\n';
         } else if (key === 'caps') {
@@ -159,18 +185,83 @@ export default class Keyboard {
             this.toggleLanguage();
             return;
         } else if (key === 'done') {
+            // Prevent multiple submissions during processing
+            if (this.isProcessing) {
+                return;
+            }
+            
+            // Prevent submission if input is too short
+            if (this.value.trim().length < CONFIG.TERMINAL.VALIDATION.MIN_LENGTH) {
+                return;
+            }
+            
             if (this.onSubmit) {
                 this.onSubmit(this.value);
             }
             this.value = "";
+            this.updateKeyboardState();
             return;
         } else {
-            const char = this.getKeyText(key);
-            this.value += char;
+            if (this.value.length < CONFIG.TERMINAL.VALIDATION.MAX_LENGTH) {
+                const char = this.getKeyText(key);
+                this.value += char;
+            }
         }
+        
+        this.updateKeyboardState();
         
         if (this.onInput) {
             this.onInput(this.value);
         }
+    }
+
+    updateKeyboardState() {
+        const isAtLimit = this.value.length >= CONFIG.TERMINAL.VALIDATION.MAX_LENGTH;
+        
+        this.keyboard.querySelectorAll('.keyboard__key').forEach(keyElement => {
+            const originalKey = keyElement.dataset.key;
+            
+            // Handle done button - disable during processing or insufficient input
+            if (originalKey === 'done') {
+                // Remove all state classes first
+                keyElement.classList.remove('keyboard__key--disabled', 'keyboard__key--processing');
+                
+                const valueLength = this.value.trim().length;
+                const minLength = CONFIG.TERMINAL.VALIDATION.MIN_LENGTH;
+                
+                if (this.isProcessing) {
+                    keyElement.classList.add('keyboard__key--processing');
+                } else if (valueLength < minLength) {
+                    keyElement.classList.add('keyboard__key--disabled');
+                }
+            }
+            // Handle other keys (except backspace) - disable when at character limit OR when processing
+            else if (originalKey !== 'backspace') {
+                if (isAtLimit || !this.isKeyboardEnabled) {
+                    keyElement.classList.add('keyboard__key--disabled');
+                } else {
+                    keyElement.classList.remove('keyboard__key--disabled');
+                }
+            }
+            // Handle backspace - disable only when processing (keep enabled at limit for editing)
+            else if (originalKey === 'backspace') {
+                if (!this.isKeyboardEnabled) {
+                    keyElement.classList.add('keyboard__key--disabled');
+                } else {
+                    keyElement.classList.remove('keyboard__key--disabled');
+                }
+            }
+        });
+    }
+
+    setProcessing(isProcessing) {
+        this.isProcessing = isProcessing;
+        this.updateKeyboardState();
+    }
+
+    setKeyboardEnabled(enabled) {
+        this.isKeyboardEnabled = enabled;
+        // Remove global keyboard disabling, use individual key states instead
+        this.updateKeyboardState();
     }
 } 

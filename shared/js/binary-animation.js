@@ -1,3 +1,5 @@
+import { CONFIG } from '../config/index.js';
+
 export class BinaryAnimation {
   constructor(canvas, config) {
     this.canvas = canvas;
@@ -6,8 +8,10 @@ export class BinaryAnimation {
     this.bits = [];
     this.raf = null;
     this.then = Date.now();
-    this.interval = 2000 / this.config.FPS;
+    this.interval = CONFIG.BINARY_ANIMATION.INTERVAL_MULTIPLIER / this.config.FPS;
     this.frameCount = 0;
+    this.gradient = null;
+    this.twinkleEffects = [];
 
     this.init();
   }
@@ -43,7 +47,7 @@ export class BinaryAnimation {
         this.bits.push({
           x: c * this.config.FONT_SIZE,
           y: r * this.config.FONT_SIZE,
-          value: isEmpty ? null : this.getRandomChar(),
+          value: isEmpty ? null : this.getRandomBit(),
           hasDrawn: false,
           isEmpty: isEmpty,
         });
@@ -51,10 +55,8 @@ export class BinaryAnimation {
     }
   }
 
-  getRandomChar() {
-    return this.config.BIN_CHARS[
-      Math.floor(Math.random() * this.config.BIN_CHARS.length)
-    ];
+  getRandomBit() {
+    return this.config.BIN_CHARS[Math.floor(Math.random() * CONFIG.BINARY_ANIMATION.CHAR_RANDOM_MULTIPLIER)];
   }
 
   drawInitialBits() {
@@ -86,7 +88,7 @@ export class BinaryAnimation {
 
   updateBits() {
     for (let bit of this.bits) {
-      if (bit.hasDrawn && !bit.isEmpty && Math.random() * 100 > 95) {
+      if (bit.hasDrawn && !bit.isEmpty && Math.random() * 100 > CONFIG.BINARY_ANIMATION.TWINKLE_THRESHOLD) {
         this.clearBit(bit);
         bit.value = this.getNewBitValue(bit.value);
         this.drawBit(bit);
@@ -98,7 +100,7 @@ export class BinaryAnimation {
     if (currentValue === this.config.BIN_CHARS[1]) {
       return this.config.BIN_CHARS[0];
     } else if (currentValue === this.config.BIN_CHARS[0]) {
-      return this.config.BIN_CHARS[Math.floor(Math.random() * 2.1)];
+      return this.config.BIN_CHARS[Math.floor(Math.random() * CONFIG.BINARY_ANIMATION.CHAR_RANDOM_MULTIPLIER)];
     }
     return this.config.BIN_CHARS[1];
   }
@@ -128,6 +130,21 @@ export class BinaryAnimation {
   }
 
   drawBit(bit) {
+    if (!bit.isEmpty) {
+      // Check if it should twinkle
+      if (bit.hasDrawn && !bit.isEmpty && Math.random() * 100 > CONFIG.BINARY_ANIMATION.TWINKLE_THRESHOLD) {
+        // Add twinkle effect
+        this.twinkleEffects.push({
+          x: bit.x,
+          y: bit.y,
+          startTime: performance.now(),
+          duration: this.config.TWINKLE.DURATION
+        });
+      }
+
+      bit.hasDrawn = true;
+    }
+
     this.ctx.fillText(bit.value, bit.x, bit.y + this.config.FONT_SIZE);
   }
 

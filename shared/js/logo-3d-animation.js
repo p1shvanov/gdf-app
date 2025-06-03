@@ -107,10 +107,10 @@ export class Logo3DAnimation {
     this.camera.position.z = CONFIG.LOGO_3D.CAMERA.POSITION_Z;
 
     // Add lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, CONFIG.LOGO_3D.LIGHTING.AMBIENT_INTENSITY);
     this.scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, CONFIG.LOGO_3D.LIGHTING.DIRECTIONAL_INTENSITY);
     directionalLight.position.set(0, 1, 1);
     this.scene.add(directionalLight);
 

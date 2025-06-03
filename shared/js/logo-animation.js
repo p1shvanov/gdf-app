@@ -1,3 +1,5 @@
+import { CONFIG } from '../config/index.js';
+
 export class LogoAnimation {
   constructor(selector = ".logo") {
     this.logos = document.querySelectorAll(selector);
@@ -25,7 +27,7 @@ export class LogoAnimation {
     return this.animationPairs[Math.floor(Math.random() * this.animationPairs.length)];
   }
 
-  start(intervalTime = 10000) {
+  start(intervalTime = CONFIG.LOGO_ANIMATION.DEFAULT_INTERVAL) {
     this.interval = setInterval(() => {
       this.rotate();
     }, intervalTime);

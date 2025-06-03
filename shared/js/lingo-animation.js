@@ -1,9 +1,11 @@
+import { CONFIG } from '../config/index.js';
+
 export class LingoAnimation {
   constructor(config) {
     this.config = config;
     this.divs = [];
     this.counter = 0;
-    this.maxDivs = 1000;
+    this.maxDivs = CONFIG.LINGO_ANIMATION.MAX_DIVS;
     this.bodyH = document.body.clientHeight;
     this.bodyW = document.body.clientWidth;
     this.words = []; // Initialize with empty array
@@ -38,8 +40,8 @@ export class LingoAnimation {
 
       // Start interval for creating new divs
       setTimeout(() => {
-        this.animationInterval = setInterval(() => this.newLingo(), 10);
-      }, 750);
+        this.animationInterval = setInterval(() => this.newLingo(), CONFIG.LINGO_ANIMATION.CREATION_INTERVAL);
+      }, CONFIG.LINGO_ANIMATION.INITIAL_DELAY);
     }
   }
 
@@ -79,27 +81,27 @@ export class LingoAnimation {
 
     div.style.setProperty('--init-x', div.style.left + 'px');
     div.style.setProperty('--init-y', div.style.top + 'px');
-    const _destZ = this.getRandomInt(100, 600);
+    const _destZ = this.getRandomInt(CONFIG.LINGO_ANIMATION.Z_DEPTH_MIN, CONFIG.LINGO_ANIMATION.Z_DEPTH_MAX);
 
     const quad = this.getQuandrantForElem(div);
     if (quad === 1) {
-      div.style.setProperty('--dest-x', -50 + '%');
-      div.style.setProperty('--dest-y', -50 + '%');
+      div.style.setProperty('--dest-x', -CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
+      div.style.setProperty('--dest-y', -CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
       div.style.setProperty('--dest-z', _destZ + 'px');
     }
     if (quad === 2) {
-      div.style.setProperty('--dest-x', 50 + '%');
-      div.style.setProperty('--dest-y', -50 + '%');
+      div.style.setProperty('--dest-x', CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
+      div.style.setProperty('--dest-y', -CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
       div.style.setProperty('--dest-z', _destZ + 'px');
     }
     if (quad === 3) {
-      div.style.setProperty('--dest-x', -50 + '%');
-      div.style.setProperty('--dest-y', 50 + '%');
+      div.style.setProperty('--dest-x', -CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
+      div.style.setProperty('--dest-y', CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
       div.style.setProperty('--dest-z', _destZ + 'px');
     }
     if (quad === 4) {
-      div.style.setProperty('--dest-x', 50 + '%');
-      div.style.setProperty('--dest-y', 50 + '%');
+      div.style.setProperty('--dest-x', CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
+      div.style.setProperty('--dest-y', CONFIG.LINGO_ANIMATION.DESTINATION_OFFSET + '%');
       div.style.setProperty('--dest-z', _destZ + 'px');
     }
 
@@ -129,7 +131,7 @@ export class LingoAnimation {
       X: elem.style.left.slice(0, -2),
       Y: elem.style.top.slice(0, -2),
     };
-    const buffer = 50;
+    const buffer = CONFIG.LINGO_ANIMATION.QUADRANT_BUFFER;
 
     if (divDim.X >= this.bodyW / 2 - buffer) {
       if (divDim.Y >= this.bodyH / 2) {

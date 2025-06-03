@@ -8,12 +8,7 @@ class App {
   constructor() {
     this.canvas = setupCanvas();
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
-    this.terminalAnimation = new TerminalAnimation(
-      [],
-      CONFIG.COLORS.PURPLE,
-      CONFIG.COLORS.PINK,
-      CONFIG.COLORS.TEAL
-    );
+    this.terminalAnimation = new TerminalAnimation();
     this.logoAnimation = new LogoAnimation();
 
     this.init();
