@@ -9,7 +9,7 @@ export class LogoAnimation {
     
     // Animation pairs for exit and entrance
     this.animationPairs = [
-      { exit: 'bounceOutLeft', enter: 'bounceInLeft' },,
+      { exit: 'bounceOutLeft', enter: 'bounceInLeft' },
     ];
 
     this.init();

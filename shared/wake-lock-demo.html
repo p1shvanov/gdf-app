@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wake Lock Demo - Тест системы предотвращения сна</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1e28, #1a2b3a);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+        .status-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 140px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .log-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .log-success { background: rgba(76, 175, 80, 0.2); }
+        .log-warning { background: rgba(255, 152, 0, 0.2); }
+        .log-error { background: rgba(244, 67, 54, 0.2); }
+        .log-info { background: rgba(33, 150, 243, 0.2); }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #4CAF50;
+        }
+        .timer {
+            font-size: 24px;
+            text-align: center;
+            color: #4CAF50;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Wake Lock Demo</h1>
+        <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">
+            Тестирование системы предотвращения спящего режима
+        </p>
+
+        <div class="status-panel">
+            <h3>📊 Статус системы</h3>
+            <div id="status-info">Загрузка...</div>
+        </div>
+
+        <div class="control-panel">
+            <button id="activate-btn">🔒 Активировать</button>
+            <button id="deactivate-btn">🔓 Деактивировать</button>
+            <button id="status-btn">📊 Проверить статус</button>
+            <button id="clear-log-btn">🧹 Очистить лог</button>
+        </div>
+
+        <div class="timer" id="active-timer" style="display: none;">
+            Активно: <span id="timer-value">00:00:00</span>
+        </div>
+
+        <div class="log-panel">
+            <h3>📝 Лог событий</h3>
+            <div id="log-container"></div>
+        </div>
+
+        <div class="status-panel">
+            <h3>✨ Возможности системы</h3>
+            <ul class="feature-list">
+                <li>🌟 <strong>Screen Wake Lock API</strong> - современный браузерный API</li>
+                <li>🔄 <strong>Fallback методы</strong> - для старых браузеров</li>
+                <li>🔁 <strong>Автовосстановление</strong> - при переключении вкладок</li>
+                <li>🧹 <strong>Умная очистка</strong> - автоматическое освобождение ресурсов</li>
+                <li>📱 <strong>Кроссбраузерность</strong> - работает везде</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import wakeLockManager from './wakeLock.js';
+        
+        // UI элементы
+        const statusInfo = document.getElementById('status-info');
+        const activateBtn = document.getElementById('activate-btn');
+        const deactivateBtn = document.getElementById('deactivate-btn');
+        const statusBtn = document.getElementById('status-btn');
+        const clearLogBtn = document.getElementById('clear-log-btn');
+        const logContainer = document.getElementById('log-container');
+        const activeTimer = document.getElementById('active-timer');
+        const timerValue = document.getElementById('timer-value');
+
+        // Переменные для таймера
+        let startTime = null;
+        let timerInterval = null;
+
+        // Функция логирования
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Ограничиваем количество записей
+            if (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }
+
+        // Функция обновления статуса
+        function updateStatus() {
+            const status = wakeLockManager.getStatus();
+            statusInfo.innerHTML = `
+                <strong>Поддержка Wake Lock API:</strong> ${status.isSupported ? '✅ Да' : '❌ Нет'}<br>
+                <strong>Статус:</strong> ${status.isActive ? '🟢 Активно' : '🔴 Неактивно'}<br>
+                <strong>Нативный Wake Lock:</strong> ${status.hasNativeWakeLock ? '✅ Да' : '❌ Нет'}<br>
+                <strong>Метод:</strong> ${status.method || 'Не активирован'}
+            `;
+            
+            // Обновляем состояние кнопок
+            activateBtn.disabled = status.isActive;
+            deactivateBtn.disabled = !status.isActive;
+            
+            // Управляем таймером
+            if (status.isActive && !timerInterval) {
+                startTimer();
+            } else if (!status.isActive && timerInterval) {
+                stopTimer();
+            }
+        }
+
+        // Функции таймера
+        function startTimer() {
+            startTime = Date.now();
+            activeTimer.style.display = 'block';
+            timerInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                
+                timerValue.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            activeTimer.style.display = 'none';
+        }
+
+        // Обработчики событий
+        activateBtn.addEventListener('click', async () => {
+            try {
+                log('Попытка активации Wake Lock...', 'info');
+                const result = await wakeLockManager.requestWakeLock();
+                if (result) {
+                    log('✅ Wake Lock успешно активирован!', 'success');
+                } else {
+                    log('⚠️ Wake Lock активирован с fallback методами', 'warning');
+                }
+                updateStatus();
+            } catch (error) {
+                log(`❌ Ошибка активации: ${error.message}`, 'error');
+            }
+        });
+
+        deactivateBtn.addEventListener('click', async () => {
+            try {
+                log('Деактивация Wake Lock...', 'info');
+                await wakeLockManager.releaseWakeLock();
+                log('🔓 Wake Lock успешно деактивирован', 'success');
+                updateStatus();
+            } catch (error) {
+                log(`❌ Ошибка деактивации: ${error.message}`, 'error');
+            }
+        });
+
+        statusBtn.addEventListener('click', () => {
+            const status = wakeLockManager.getStatus();
+            log(`📊 Статус: ${JSON.stringify(status, null, 2)}`, 'info');
+            updateStatus();
+        });
+
+        clearLogBtn.addEventListener('click', () => {
+            logContainer.innerHTML = '';
+            log('🧹 Лог очищен', 'info');
+        });
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Wake Lock Demo загружен', 'success');
+            updateStatus();
+            
+            // Проверяем статус каждые 5 секунд
+            setInterval(updateStatus, 5000);
+        });
+
+        // Обработчик закрытия страницы
+        window.addEventListener('beforeunload', () => {
+            if (wakeLockManager.getStatus().isActive) {
+                wakeLockManager.releaseWakeLock();
+            }
+        });
+    </script>
+</body>
+</html> 

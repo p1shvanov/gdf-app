@@ -4,6 +4,7 @@ import { BinaryAnimation } from "../shared/js/binary-animation.js";
 import { LingoAnimation } from "../shared/js/lingo-animation.js";
 import { Logo3DAnimation } from "../shared/js/logo-3d-animation.js";
 import { WordsReceiver } from "../shared/js/words-receiver.js";
+import wakeLockManager from "../shared/wakeLock.js";
 
 class App {
   constructor() {
@@ -18,10 +19,18 @@ class App {
     this.init();
   }
 
-  init() {
+  async init() {
     this.binaryAnimation.draw();
     this.lingoAnimation.init();
     this.logo3DAnimation.start();
+
+    // Активируем блокировку сна
+    try {
+      await wakeLockManager.requestWakeLock();
+      console.log('✅ Защита от спящего режима активирована для финальной страницы');
+    } catch (error) {
+      console.warn('⚠️ Не удалось активировать защиту от спящего режима:', error);
+    }
 
     // Subscribe to word updates and start polling
     this.wordsReceiver.subscribe(this.handleNewWords.bind(this));
@@ -34,6 +43,18 @@ class App {
       resizeTimeout = setTimeout(() => {
         this.handleResize();
       }, CONFIG.CANVAS.RESIZE_DEBOUNCE);
+    });
+    
+    // Освобождаем блокировку при выходе со страницы
+    window.addEventListener("beforeunload", () => {
+      wakeLockManager.releaseWakeLock();
+    });
+    
+    // Также освобождаем при скрытии страницы
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        wakeLockManager.releaseWakeLock();
+      }
     });
   }
 
