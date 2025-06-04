@@ -132,11 +132,7 @@ class FormApp {
   }
 
   setupEventListeners() {
-    document.getElementById('terminal-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        this.handleSubmit();
-      }
-    });
+    // Virtual keyboard handles all input, no need for physical keyboard listeners
   }
 
   async handleSubmit() {
@@ -213,7 +209,7 @@ class Keyboard {
     document.querySelectorAll('.key').forEach(key => {
       key.addEventListener('click', () => {
         const value = key.dataset.value;
-        if (value === 'enter') {
+        if (value === 'done') {
           this.terminal.submit();
         } else if (value === 'backspace') {
           this.terminal.backspace();
@@ -410,7 +406,7 @@ class PerformanceMonitor {
 ### Процесс работы
 1. **Приветствие участника**
    ```
-   "Welcome to Code of the Future! Please enter one word or phrase in English that represents your vision of the future."
+   Welcome to Code of the Future! Please input one word or phrase in English that represents your vision of the future.
    ```
 
 2. **Объяснение правил**
@@ -460,3 +456,37 @@ class PerformanceMonitor {
 2. Регулярно проверяйте работу панели
 3. Поддерживайте чистоту и порядок в зоне
 4. Будьте внимательны к потребностям участников 
+
+## Функциональность клавиатуры
+
+### iOS-подобная кнопка Caps
+Кнопка Caps работает по принципу iOS клавиатуры с тремя состояниями:
+
+1. **Обычное состояние** (normal) - все символы в нижнем регистре
+2. **Shift режим** (shift) - следующий символ будет заглавным, затем возврат к обычному состоянию
+3. **Caps Lock режим** (capsLock) - все символы в верхнем регистре до повторного нажатия
+
+#### Переключение состояний:
+- **Одно нажатие** из обычного состояния → Shift режим
+- **Два быстрых нажатия** (в течение 300мс) → Caps Lock режим  
+- **Одно нажатие** из Caps Lock → Обычное состояние
+- **Автоматический сброс** Shift режима после ввода символа
+
+#### Визуальные индикаторы:
+- **Shift режим**: индикатор загорается с анимацией
+- **Caps Lock режим**: вся кнопка меняет цвет на активный
+- **Обычное состояние**: стандартный вид кнопки
+
+```javascript
+// Пример использования в keyboard.js
+handleCapsClick() {
+    const currentTime = Date.now();
+    const timeSinceLastClick = currentTime - this.lastCapsClickTime;
+    
+    if (timeSinceLastClick < this.doubleTapDelay && this.capsState === 'shift') {
+        this.capsState = 'capsLock'; // Двойной клик
+    } else if (this.capsState === 'normal') {
+        this.capsState = 'shift'; // Одиночный клик
+    } // ... другие состояния
+}
+``` 

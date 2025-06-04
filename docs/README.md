@@ -149,7 +149,7 @@
 2. **Тач-панели (5 шт.)**
    - Равномерное распределение
    - Инструкция на каждой панели:
-     "Enter one word or phrase in English that represents your vision of the future."
+     "Input one word or phrase in English that represents your vision of the future."
 
 3. **Большой экран**
    - Отображение "живого" кода из слов участников

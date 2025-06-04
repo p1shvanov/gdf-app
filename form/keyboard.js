@@ -54,7 +54,12 @@ export default class Keyboard {
         this.onInput = null;
         this.onSubmit = null;
         this.value = "";
-        this.isCapsLock = false;
+        
+        // iOS-like caps functionality
+        this.capsState = 'normal'; // 'normal', 'shift', 'capsLock'
+        this.lastCapsClickTime = 0;
+        this.doubleTapDelay = 300; // milliseconds for detecting double tap
+        
         this.currentLanguage = Keyboard.LANGUAGES.EN;
         this.isProcessing = false;
         this.isKeyboardEnabled = true;
@@ -71,7 +76,7 @@ export default class Keyboard {
         const keyLayout = [
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "backspace",
             "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-            "caps", "a", "s", "d", "f", "g", "h", "j", "k", "l", "enter",
+            "caps", "a", "s", "d", "f", "g", "h", "j", "k", "l",
             "lang", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?",
             "space", "done"
         ];
@@ -83,7 +88,7 @@ export default class Keyboard {
 
         keyLayout.forEach(key => {
             const keyElement = document.createElement("button");
-            const insertLineBreak = ["backspace", "p", "enter", "?"].indexOf(key) !== -1;
+            const insertLineBreak = ["backspace", "p", "l", "?"].indexOf(key) !== -1;
 
             // Add attributes/classes
             keyElement.setAttribute("type", "button");
@@ -99,11 +104,6 @@ export default class Keyboard {
                 case "caps":
                     keyElement.classList.add("keyboard__key--wide", "keyboard__key--activatable");
                     keyElement.innerHTML = createIconHTML("keyboard_capslock");
-                    break;
-
-                case "enter":
-                    keyElement.classList.add("keyboard__key--wide");
-                    keyElement.innerHTML = createIconHTML("keyboard_return");
                     break;
 
                 case "space":
@@ -156,7 +156,15 @@ export default class Keyboard {
 
     getKeyText(key) {
         const char = Keyboard.KEYBOARD_LAYOUTS[this.currentLanguage][key] || key;
-        return this.isCapsLock ? char.toUpperCase() : char.toLowerCase();
+        
+        // Handle caps state logic
+        if (this.capsState === 'capsLock') {
+            return char.toUpperCase();
+        } else if (this.capsState === 'shift') {
+            return char.toUpperCase();
+        } else {
+            return char.toLowerCase();
+        }
     }
 
     updateKeyboardLayout() {
@@ -166,6 +174,49 @@ export default class Keyboard {
                 keyElement.textContent = this.getKeyText(originalKey);
             }
         });
+    }
+
+    handleCapsClick() {
+        const currentTime = Date.now();
+        const timeSinceLastClick = currentTime - this.lastCapsClickTime;
+        const previousState = this.capsState;
+        
+        if (timeSinceLastClick < this.doubleTapDelay && this.capsState === 'shift') {
+            // Double tap detected - switch to caps lock
+            this.capsState = 'capsLock';
+        } else if (this.capsState === 'normal') {
+            // Single tap from normal - switch to shift
+            this.capsState = 'shift';
+        } else if (this.capsState === 'shift') {
+            // Single tap from shift (not double tap) - switch to normal
+            this.capsState = 'normal';
+        } else if (this.capsState === 'capsLock') {
+            // Tap from caps lock - switch to normal
+            this.capsState = 'normal';
+        }
+        
+        // Debug logging
+        console.log(`Caps state changed: ${previousState} → ${this.capsState} (time since last click: ${timeSinceLastClick}ms)`);
+        
+        this.lastCapsClickTime = currentTime;
+        
+        // Update visual state
+        this.updateCapsVisualState();
+        this.updateKeyboardLayout();
+    }
+
+    updateCapsVisualState() {
+        const capsButton = this.keyboard.querySelector('[data-key="caps"]');
+        
+        // Remove all caps states
+        capsButton.classList.remove('keyboard__key--active', 'keyboard__key--shift', 'keyboard__key--capslock');
+        
+        // Add appropriate state class
+        if (this.capsState === 'shift') {
+            capsButton.classList.add('keyboard__key--shift');
+        } else if (this.capsState === 'capsLock') {
+            capsButton.classList.add('keyboard__key--capslock');
+        }
     }
 
     toggleLanguage() {
@@ -190,12 +241,8 @@ export default class Keyboard {
             if (this.value.length < CONFIG.TERMINAL.VALIDATION.MAX_LENGTH) {
                 this.value += ' ';
             }
-        } else if (key === 'enter') {
-            this.value += '\n';
         } else if (key === 'caps') {
-            this.isCapsLock = !this.isCapsLock;
-            this.keyboard.querySelector('[data-key="caps"]').classList.toggle('keyboard__key--active', this.isCapsLock);
-            this.updateKeyboardLayout();
+            this.handleCapsClick();
         } else if (key === 'lang') {
             this.toggleLanguage();
             return;
@@ -220,6 +267,14 @@ export default class Keyboard {
             if (this.value.length < CONFIG.TERMINAL.VALIDATION.MAX_LENGTH) {
                 const char = this.getKeyText(key);
                 this.value += char;
+                
+                // Reset shift mode after typing one character (iOS behavior)
+                if (this.capsState === 'shift') {
+                    console.log('Shift mode auto-reset after typing character');
+                    this.capsState = 'normal';
+                    this.updateCapsVisualState();
+                    this.updateKeyboardLayout();
+                }
             }
         }
         

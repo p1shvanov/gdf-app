@@ -66,6 +66,27 @@
   background: var(--color-terminal-username);
 }
 
+/* iOS-like caps states */
+.keyboard__key--shift::after {
+  background: var(--color-terminal-username);
+  animation: shift-blink 0.3s ease-in-out;
+}
+
+.keyboard__key--capslock {
+  background: var(--color-terminal-username);
+  color: var(--color-keyboard-bg);
+}
+
+.keyboard__key--capslock::after {
+  background: var(--color-keyboard-bg);
+}
+
+@keyframes shift-blink {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
 .keyboard__key--dark {
   background: var(--color-keyboard-dark);
 }

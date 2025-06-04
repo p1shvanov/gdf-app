@@ -32,13 +32,6 @@ export class TerminalAnimation {
     
     // Setup keyboard input (keyboard should be initialized separately)
     this.setupKeyboard();
-
-    // Add keyboard event listeners
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !this.isProcessing) {
-        this.submitCommand();
-      }
-    });
   }
 
   createTerminalStructure() {
