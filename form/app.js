@@ -10,12 +10,12 @@ class App {
     this.canvas = setupCanvas();
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
     
+    // Initialize keyboard first in the footer
+    Keyboard.init('app-footer');
+    
     // Initialize modules with their respective container IDs
     this.logoAnimation = new LogoAnimation('app-header');
     this.terminalAnimation = new TerminalAnimation('app-main');
-    
-    // Initialize keyboard in the footer
-    Keyboard.init('app-footer');
 
     this.init();
   }

@@ -9,10 +9,7 @@ export class LogoAnimation {
     
     // Animation pairs for exit and entrance
     this.animationPairs = [
-      { exit: 'fadeOutRightBig', enter: 'fadeInLeftBig' },
-      { exit: 'fadeOutLeftBig', enter: 'fadeInRightBig' },
-      { exit: 'bounceOutRight', enter: 'bounceInLeft' },
-      { exit: 'bounceOutLeft', enter: 'bounceInRight' },
+      { exit: 'bounceOutLeft', enter: 'bounceInLeft' },,
     ];
 
     this.init();
@@ -100,11 +97,11 @@ export class LogoAnimation {
     const animations = this.getRandomAnimationPair();
 
     // Remove current logo with exit animation
-    currentLogo.style.animation = `${animations.exit} 1s forwards`;
+    currentLogo.style.animation = `${animations.exit} 2s forwards`;
     currentLogo.classList.remove("active");
 
     // Add next logo with entrance animation
-    nextLogo.style.animation = `${animations.enter} 1s forwards`;
+    nextLogo.style.animation = `${animations.enter} 2s forwards`;
     nextLogo.classList.add("active");
 
     this.currentIndex = nextIndex;

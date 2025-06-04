@@ -30,7 +30,8 @@ export default class Keyboard {
 
     static setCallbacks(onInput, onSubmit) {
         if (!this.instance) {
-            this.init();
+            console.warn('Keyboard instance not initialized. Call Keyboard.init(containerId) first.');
+            return;
         }
         this.instance.onInput = onInput;
         this.instance.onSubmit = onSubmit;

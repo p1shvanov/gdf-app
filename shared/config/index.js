@@ -149,7 +149,7 @@ export const CONFIG = {
 
   // Logo Animation Settings
   LOGO_ANIMATION: {
-    DEFAULT_INTERVAL: 10000 // 10 seconds between logo changes
+    DEFAULT_INTERVAL: 5000 // 10 seconds between logo changes
   },
 
   // Effects

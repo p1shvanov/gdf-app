@@ -1,19 +1,4 @@
 /* Keyboard Container */
-.keyboard {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 15px 0;
-  background: rgba(15, 30, 40, 0.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
-  -webkit-user-select: none;
-  user-select: none;
-  z-index: var(--z-keyboard);
-  border-top: 1px solid var(--color-terminal-border);
-}
 
 .keyboard__keys {
   text-align: center;
@@ -30,7 +15,7 @@
   margin: 4px;
   border-radius: 8px;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-keyboard-bg);
   color: var(--color-white);
   font-size: 1.1rem;
   outline: none;
@@ -46,12 +31,12 @@
 }
 
 .keyboard__key:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-keyboard-hover);
   transform: translateY(-1px);
 }
 
 .keyboard__key:active {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-keyboard-active);
   transform: translateY(1px);
 }
 
@@ -72,7 +57,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--color-keyboard-indicator);
   border-radius: 50%;
   transition: background-color 0.2s ease;
 }
@@ -82,37 +67,37 @@
 }
 
 .keyboard__key--dark {
-  background: rgba(94, 44, 237, 0.2);
+  background: var(--color-keyboard-dark);
 }
 
 .keyboard__key--dark:hover {
-  background: rgba(94, 44, 237, 0.3);
+  background: var(--color-keyboard-dark-hover);
 }
 
 .keyboard__key--dark:active {
-  background: rgba(94, 44, 237, 0.4);
+  background: var(--color-keyboard-dark-active);
 }
 
 /* Disabled keys when character limit is reached */
 .keyboard__key--disabled {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: rgba(255, 255, 255, 0.3) !important;
-  cursor: not-allowed !important;
+  background: var(--color-keyboard-disabled);
+  color: var(--color-keyboard-disabled-text);
+  cursor: not-allowed;
   pointer-events: none;
   opacity: 0.5;
 }
 
 .keyboard__key--disabled:hover,
 .keyboard__key--disabled:active {
-  background: rgba(255, 255, 255, 0.05) !important;
-  transform: none !important;
+  background: var(--color-keyboard-disabled);
+  transform: none;
 }
 
 /* Processing state for done button */
 .keyboard__key--processing {
-  background: rgba(94, 44, 237, 0.1) !important;
-  color: rgba(255, 255, 255, 0.6) !important;
-  cursor: wait !important;
+  background: var(--color-keyboard-processing);
+  color: var(--color-keyboard-processing-text);
+  cursor: wait;
   pointer-events: none;
   animation: processing-pulse 1.5s ease-in-out infinite;
 }
