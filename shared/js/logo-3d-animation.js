@@ -3,17 +3,10 @@ import { CONFIG } from "../config/index.js";
 export class Logo3DAnimation {
   constructor() {
     this.scene = new THREE.Scene();
-    this.ratio = window.innerWidth / window.innerHeight;
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
     });
-    this.camera = new THREE.PerspectiveCamera(
-      CONFIG.LOGO_3D.CAMERA.FOV,
-      this.ratio,
-      CONFIG.LOGO_3D.CAMERA.NEAR,
-      CONFIG.LOGO_3D.CAMERA.FAR
-    );
     this.svgGroup = null;
     this.rotationGroup = null;
     this.isAnimating = false;
@@ -104,6 +97,12 @@ export class Logo3DAnimation {
     container.appendChild(this.renderer.domElement);
 
     // Setup camera
+    this.camera = new THREE.PerspectiveCamera(
+      CONFIG.LOGO_3D.CAMERA.FOV,
+      rect.width / rect.height,
+      CONFIG.LOGO_3D.CAMERA.NEAR,
+      CONFIG.LOGO_3D.CAMERA.FAR
+    );
     this.camera.position.z = CONFIG.LOGO_3D.CAMERA.POSITION_Z;
 
     // Add lights
