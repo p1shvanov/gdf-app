@@ -3,13 +3,19 @@ import { setupCanvas } from "../shared/js/canvas-utils.js";
 import { BinaryAnimation } from "../shared/js/binary-animation.js";
 import { TerminalAnimation } from "../shared/js/terminal-animation.js";
 import { LogoAnimation } from "../shared/js/logo-animation.js";
+import Keyboard from "./keyboard.js";
 
 class App {
   constructor() {
     this.canvas = setupCanvas();
     this.binaryAnimation = new BinaryAnimation(this.canvas, CONFIG);
-    this.terminalAnimation = new TerminalAnimation();
-    this.logoAnimation = new LogoAnimation();
+    
+    // Initialize modules with their respective container IDs
+    this.logoAnimation = new LogoAnimation('app-header');
+    this.terminalAnimation = new TerminalAnimation('app-main');
+    
+    // Initialize keyboard in the footer
+    Keyboard.init('app-footer');
 
     this.init();
   }

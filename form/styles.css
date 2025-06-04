@@ -5,47 +5,111 @@
 @import url('../shared/css/terminal.css');
 @import url('../shared/css/keyboard.css');
 
-.content {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "header"
-    "console";
-  margin: 0 auto;
+/* Main app layout */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: var(--z-content);
 }
 
-.header {
-  grid-area: header;
-  padding: 1rem;
+.app-header {
+  height: 18vh;
+  min-height: 120px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 2rem 4rem;
   position: relative;
+  flex-shrink: 0;
+  z-index: var(--z-content);
+  gap: 3rem;
 }
 
+.app-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow: hidden;
+  position: relative;
+  z-index: var(--z-content);
+}
+
+.app-footer {
+  height: 32vh;
+  min-height: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* Header styles */
 .logo-container {
-  width: 80px;
-  height: 80px;
+  width: clamp(100px, 36vw, 480px);
+  height: clamp(100px, 12vw, 160px);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
 }
 
 .header-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 60vw;
+  animation: fadeInRight 1.2s ease-out;
+}
+
+.header-title {
+  font-size: clamp(1.5rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-white);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.header-subtitle {
+  font-size: clamp(0.7rem, 1.4vw, 1.3rem);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  max-width: 100%;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .logo {
   position: absolute;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   opacity: 0;
   transition: opacity 1s ease-in-out;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+  animation: fadeInLeft 1s ease-out both;
 }
 
 .logo.active {
@@ -54,23 +118,22 @@
 
 /* Console Styles */
 .console-container {
-  grid-area: console;
   width: 100%;
   max-width: 90%;
-  height: 60vh;
-  min-height: 300px;
+  height: 100%;
+  max-height: 100%;
   color: var(--color-white);
   font-size: 1.2rem;
   font-family: var(--font-family-monospace);
   text-align: left;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
   overflow: hidden;
   position: relative;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-content) + 1);
 }
 
 .terminal-header {
@@ -198,10 +261,6 @@
 
 .terminal-error {
   color: #ff5f56;
-  margin-left: 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid rgba(255, 95, 86, 0.3);
-  line-height: 1.6;
 }
 
 .terminal-generating {
@@ -227,11 +286,19 @@
   50% { opacity: 0; }
 }
 
-/* Keyboard Styles */
-.keyboard {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+.terminal-char-limit {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+/* Keyboard Styles - Override shared styles for form layout */
+.app-footer .keyboard {
+  position: relative !important;
+  left: auto !important;
+  bottom: auto !important;
   width: 100%;
   padding: 15px 0;
   background: rgba(15, 30, 40, 0.95);
@@ -240,8 +307,9 @@
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
   -webkit-user-select: none;
   user-select: none;
-  z-index: 1000;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px 8px 0 0;
+  z-index: calc(var(--z-content) + 1) !important;
 }
 
 .keyboard__keys {
@@ -322,3 +390,42 @@
 
 /* Material Icons */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* Override canvas overlay for better visibility */
+#canvas-overlay {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Keyframe animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

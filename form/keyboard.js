@@ -21,11 +21,11 @@ export default class Keyboard {
         }
     };
 
-    static init() {
+    static init(containerId = null) {
         if (this.instance) {
             return;
         }
-        this.instance = new Keyboard();
+        this.instance = new Keyboard(containerId);
     }
 
     static setCallbacks(onInput, onSubmit) {
@@ -48,7 +48,8 @@ export default class Keyboard {
         }
     }
 
-    constructor() {
+    constructor(containerId = null) {
+        this.containerId = containerId;
         this.onInput = null;
         this.onSubmit = null;
         this.value = "";
@@ -132,7 +133,20 @@ export default class Keyboard {
         });
 
         main.appendChild(keysContainer);
-        document.body.appendChild(main);
+        
+        // Append to specified container or document.body
+        if (this.containerId) {
+            const container = document.getElementById(this.containerId);
+            if (container) {
+                container.appendChild(main);
+            } else {
+                console.error(`Container with id "${this.containerId}" not found`);
+                document.body.appendChild(main);
+            }
+        } else {
+            document.body.appendChild(main);
+        }
+        
         this.keyboard = main;
         
         // Set initial keyboard state (disable done button for empty input)

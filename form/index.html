@@ -18,43 +18,27 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
+    <!-- Background canvas -->
     <canvas id="binary-canvas"></canvas>
     <div id="canvas-overlay"></div>
 
-    <main class="content">
-      <header class="header">
-        <div class="logo-container">
-          <img
-            src="../assets/logo/svg/GDF_Logo-01.svg"
-            class="logo active"
-            alt="Logo variant 1"
-          />
-          <img src="../assets/logo/svg/GDF_Logo-02.svg" class="logo" alt="Logo variant 2" />
-          <img src="../assets/logo/svg/GDF_Logo-03.svg" class="logo" alt="Logo variant 3" />
-          <img src="../assets/logo/svg/GDF_Logo-04.svg" class="logo" alt="Logo variant 4" />
-          <img src="../assets/logo/svg/GDF_Logo-05.svg" class="logo" alt="Logo variant 5" />
-          <img src="../assets/logo/svg/GDF_Logo-06.svg" class="logo" alt="Logo variant 6" />
-        </div>
-        <div class="header-text">
-          <div class="header-title">CODE OF THE FUTURE</div>
-          <div class="header-subtitle">Shaping the Code of the Future at the Global Digital Forum</div>
-        </div>
+    <!-- Main layout container -->
+    <div class="app-layout">
+      <!-- Header section -->
+      <header class="app-header" id="app-header">
+        <!-- Logo and header content will be created by JS -->
       </header>
-      <div class="console-container">
-        <div class="terminal-header">
-          <div class="terminal-buttons">
-            <button class="terminal-button close" title="Close terminal"></button>
-            <button class="terminal-button minimize" title="Minimize terminal"></button>
-            <button class="terminal-button maximize" title="Maximize terminal"></button>
-          </div>
-          <div class="terminal-title">code_of_the_future</div>
-        </div>
-        <div class="terminal-content">
-          <div class="terminal-history" id="terminal-history"></div>
-          <div class="terminal-input use-keyboard-input" id="terminal-input" tabindex="0"></div>
-        </div>
-      </div>
-    </main>
+
+      <!-- Main content section -->
+      <main class="app-main" id="app-main">
+        <!-- Terminal/console content will be created by JS -->
+      </main>
+
+      <!-- Footer section with keyboard -->
+      <footer class="app-footer" id="app-footer">
+        <!-- Keyboard will be created by JS -->
+      </footer>
+    </div>
 
     <script type="module" src="app.js" crossorigin="anonymous"></script>
   </body>

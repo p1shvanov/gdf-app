@@ -3,9 +3,10 @@ import { SheetsService } from './sheets-service.js';
 import { CONFIG } from '../config/index.js';
 
 export class TerminalAnimation {
-  constructor() {
-    this.historyTarget = document.getElementById('terminal-history');
-    this.inputTarget = document.getElementById('terminal-input');
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    this.historyTarget = null;
+    this.inputTarget = null;
     this.commands = [];
     this.maxCommands = CONFIG.TERMINAL.MAX_COMMANDS;
     this.currentCommand = "";
@@ -19,14 +20,17 @@ export class TerminalAnimation {
   }
 
   init() {
+    if (!this.container) {
+      console.error(`Container with id not found`);
+      return;
+    }
+
+    this.createTerminalStructure();
     this.historyTarget.innerHTML = "";
     this.inputTarget.innerHTML = "";
     this.updateTerminal();
     
-    // Initialize keyboard
-    Keyboard.init();
-    
-    // Setup keyboard input
+    // Setup keyboard input (keyboard should be initialized separately)
     this.setupKeyboard();
 
     // Add keyboard event listeners
@@ -35,6 +39,73 @@ export class TerminalAnimation {
         this.submitCommand();
       }
     });
+  }
+
+  createTerminalStructure() {
+    // Create console container
+    const consoleContainer = document.createElement('div');
+    consoleContainer.className = 'console-container';
+
+    // Create terminal header
+    const terminalHeader = document.createElement('div');
+    terminalHeader.className = 'terminal-header';
+
+    // Create terminal buttons
+    const terminalButtons = document.createElement('div');
+    terminalButtons.className = 'terminal-buttons';
+
+    const closeButton = document.createElement('button');
+    closeButton.className = 'terminal-button close';
+    closeButton.title = 'Close terminal';
+
+    const minimizeButton = document.createElement('button');
+    minimizeButton.className = 'terminal-button minimize';
+    minimizeButton.title = 'Minimize terminal';
+
+    const maximizeButton = document.createElement('button');
+    maximizeButton.className = 'terminal-button maximize';
+    maximizeButton.title = 'Maximize terminal';
+
+    terminalButtons.appendChild(closeButton);
+    terminalButtons.appendChild(minimizeButton);
+    terminalButtons.appendChild(maximizeButton);
+
+    // Create terminal title
+    const terminalTitle = document.createElement('div');
+    terminalTitle.className = 'terminal-title';
+    terminalTitle.textContent = 'code_of_the_future';
+
+    terminalHeader.appendChild(terminalButtons);
+    terminalHeader.appendChild(terminalTitle);
+
+    // Create terminal content
+    const terminalContent = document.createElement('div');
+    terminalContent.className = 'terminal-content';
+
+    // Create terminal history
+    const terminalHistory = document.createElement('div');
+    terminalHistory.className = 'terminal-history';
+    terminalHistory.id = 'terminal-history';
+
+    // Create terminal input
+    const terminalInput = document.createElement('div');
+    terminalInput.className = 'terminal-input use-keyboard-input';
+    terminalInput.id = 'terminal-input';
+    terminalInput.tabIndex = 0;
+
+    terminalContent.appendChild(terminalHistory);
+    terminalContent.appendChild(terminalInput);
+
+    // Assemble the structure
+    consoleContainer.appendChild(terminalHeader);
+    consoleContainer.appendChild(terminalContent);
+
+    // Add to main container
+    this.container.appendChild(consoleContainer);
+
+    // Store references
+    this.historyTarget = terminalHistory;
+    this.inputTarget = terminalInput;
   }
 
   setupKeyboard() {
