@@ -189,7 +189,9 @@ export const CONFIG = {
       FOV: 10,
       NEAR: 0.01,
       FAR: 1000,
-      POSITION_Z: 800
+      POSITION_Z: 800,
+      NEAR_MULTIPLIER: 0.1,
+      FAR_MULTIPLIER: 1.5
     },
     ROTATION: {
       SPEED: 0.005
@@ -210,6 +212,21 @@ export const CONFIG = {
     LIGHTING: {
       AMBIENT_INTENSITY: 0.8,
       DIRECTIONAL_INTENSITY: 0.5
+    },
+    POLYGON_OFFSET: {
+      ENABLED: true,
+      PATH_FACTOR: 0.1,
+      SHAPE_FACTOR: 0.01,
+      UNITS: 1
+    },
+    RENDERER: {
+      SORT_OBJECTS: true,
+      SHADOWS_ENABLED: false,
+      DOUBLE_SIDED: true,
+      DEPTH_TEST: true,
+      DEPTH_WRITE: true,
+      TRANSPARENT: false,
+      ALPHA_TEST: 0
     }
   }
 }; 

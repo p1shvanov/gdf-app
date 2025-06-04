@@ -93,17 +93,22 @@ export class Logo3DAnimation {
     const rect = container.getBoundingClientRect();
     this.renderer.setSize(rect.width, rect.height);
     this.renderer.setClearColor(0x000000, 0);
+    
+    // Configure renderer using config settings
+    this.renderer.sortObjects = CONFIG.LOGO_3D.RENDERER.SORT_OBJECTS;
+    this.renderer.shadowMap.enabled = CONFIG.LOGO_3D.RENDERER.SHADOWS_ENABLED;
 
     container.appendChild(this.renderer.domElement);
 
-    // Setup camera
+    // Setup camera with optimized near/far planes from config
+    const cameraDistance = CONFIG.LOGO_3D.CAMERA.POSITION_Z;
     this.camera = new THREE.PerspectiveCamera(
       CONFIG.LOGO_3D.CAMERA.FOV,
       rect.width / rect.height,
-      CONFIG.LOGO_3D.CAMERA.NEAR,
-      CONFIG.LOGO_3D.CAMERA.FAR
+      cameraDistance * CONFIG.LOGO_3D.CAMERA.NEAR_MULTIPLIER,
+      cameraDistance * CONFIG.LOGO_3D.CAMERA.FAR_MULTIPLIER
     );
-    this.camera.position.z = CONFIG.LOGO_3D.CAMERA.POSITION_Z;
+    this.camera.position.z = cameraDistance;
 
     // Add lights
     const ambientLight = new THREE.AmbientLight(0xffffff, CONFIG.LOGO_3D.LIGHTING.AMBIENT_INTENSITY);
@@ -131,8 +136,14 @@ export class Logo3DAnimation {
 
     const container = document.querySelector('.logo-3d');
     const rect = container.getBoundingClientRect();
+    
+    // Update camera with optimized near/far planes from config
+    const cameraDistance = CONFIG.LOGO_3D.CAMERA.POSITION_Z;
     this.camera.aspect = rect.width / rect.height;
+    this.camera.near = cameraDistance * CONFIG.LOGO_3D.CAMERA.NEAR_MULTIPLIER;
+    this.camera.far = cameraDistance * CONFIG.LOGO_3D.CAMERA.FAR_MULTIPLIER;
     this.camera.updateProjectionMatrix();
+    
     this.renderer.setSize(rect.width, rect.height);
   }
 
@@ -154,7 +165,7 @@ export class Logo3DAnimation {
     svgData.paths.forEach((path, index) => {
       const shapes = path.toShapes(true);
 
-      shapes.forEach((shape) => {
+      shapes.forEach((shape, shapeIndex) => {
         const geometry = new THREE.ExtrudeGeometry(shape, {
           depth: CONFIG.LOGO_3D.EXTRUDE.DEPTH,
           bevelEnabled: true,
@@ -163,8 +174,16 @@ export class Logo3DAnimation {
           bevelSegments: CONFIG.LOGO_3D.EXTRUDE.BEVEL_SEGMENTS,
         });
 
-        // Create shader material with gradient
+        // Create shader material with gradient and polygon offset
         const material = this.createShaderMaterial();
+        
+        // Add polygon offset to prevent Z-fighting between overlapping parts
+        if (CONFIG.LOGO_3D.POLYGON_OFFSET.ENABLED) {
+          material.polygonOffset = true;
+          material.polygonOffsetFactor = index * CONFIG.LOGO_3D.POLYGON_OFFSET.PATH_FACTOR + 
+                                       shapeIndex * CONFIG.LOGO_3D.POLYGON_OFFSET.SHAPE_FACTOR;
+          material.polygonOffsetUnits = CONFIG.LOGO_3D.POLYGON_OFFSET.UNITS;
+        }
 
         const mesh = new THREE.Mesh(geometry, material);
         this.svgGroup.add(mesh);
@@ -206,7 +225,7 @@ export class Logo3DAnimation {
     const color2 = new THREE.Color(CONFIG.COLORS.PINK);
     const color3 = new THREE.Color(CONFIG.COLORS.PURPLE);
 
-    // Create shader material with gradient
+    // Create shader material with gradient and improved settings from config
     const material = new THREE.ShaderMaterial({
       uniforms: {
         color1: { value: new THREE.Vector3(color1.r, color1.g, color1.b) },
@@ -220,6 +239,12 @@ export class Logo3DAnimation {
       },
       vertexShader: this.vertexShader,
       fragmentShader: this.fragmentShader,
+      // Configure material using config settings
+      side: CONFIG.LOGO_3D.RENDERER.DOUBLE_SIDED ? THREE.DoubleSide : THREE.FrontSide,
+      depthTest: CONFIG.LOGO_3D.RENDERER.DEPTH_TEST,
+      depthWrite: CONFIG.LOGO_3D.RENDERER.DEPTH_WRITE,
+      transparent: CONFIG.LOGO_3D.RENDERER.TRANSPARENT,
+      alphaTest: CONFIG.LOGO_3D.RENDERER.ALPHA_TEST
     });
 
     return material;
